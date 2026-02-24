@@ -419,6 +419,14 @@ a {
     padding: 1rem 1.25rem;
   }
 
+  .nav__links {
+    gap: 1rem;
+  }
+
+  .nav__link {
+    font-size: 0.7rem;
+  }
+
   .role {
     flex-direction: column;
     gap: 0.5rem;
