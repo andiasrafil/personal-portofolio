@@ -19,6 +19,41 @@ const revealObserver = new IntersectionObserver(
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
+// Section title clip-reveal
+const sectionTitles = document.querySelectorAll('.section__title');
+
+const titleObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        titleObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.2 }
+);
+
+sectionTitles.forEach((title) => titleObserver.observe(title));
+
+// Footer entrance
+const footer = document.getElementById('contact');
+
+if (footer) {
+  const footerRevealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          footerRevealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  footerRevealObserver.observe(footer);
+}
+
 // Nav border on scroll
 const nav = document.getElementById('nav');
 
@@ -58,7 +93,6 @@ function updateActiveLink() {
 window.addEventListener('scroll', updateActiveLink, { passive: true });
 
 // Footer contact active state
-const footer = document.getElementById('contact');
 if (footer) {
   const footerObserver = new IntersectionObserver(
     (entries) => {

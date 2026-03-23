@@ -14,6 +14,8 @@
   --text-muted: #3a3a3a;
   --border: #1a1a1a;
   --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html {
@@ -57,10 +59,27 @@ a {
 .link {
   color: var(--text);
   transition: color 0.3s var(--ease-out);
+  position: relative;
+  display: inline-block;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--text-strong);
+  transition: width 0.4s var(--ease-out-expo);
 }
 
 .link:hover {
   color: var(--text-strong);
+}
+
+.link:hover::after {
+  width: 100%;
 }
 
 /* ========== Nav ========== */
@@ -105,11 +124,30 @@ a {
   color: var(--text-muted);
   letter-spacing: 0.03em;
   transition: color 0.3s var(--ease-out);
+  position: relative;
 }
 
-.nav__link:hover,
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.4s var(--ease-out-expo);
+}
+
+.nav__link:hover {
+  color: var(--text);
+}
+
 .nav__link.active {
   color: var(--text);
+}
+
+.nav__link.active::after {
+  width: 100%;
 }
 
 /* ========== Hero ========== */
@@ -162,6 +200,17 @@ a {
   letter-spacing: 0.03em;
 }
 
+.hero__actions .link[download] {
+  transition: color 0.3s var(--ease-out), gap 0.3s var(--ease-out-expo);
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.hero__actions .link[download]:hover {
+  gap: 2px;
+}
+
 /* Hero entrance */
 @keyframes fadeUp {
   from {
@@ -174,12 +223,29 @@ a {
   }
 }
 
+@keyframes nameReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    letter-spacing: 0.06em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: -0.03em;
+  }
+}
+
 .hero__greeting,
-.hero__name,
 .hero__tagline,
 .hero__actions {
   opacity: 0;
   animation: fadeUp 0.8s var(--ease-out) forwards;
+}
+
+.hero__name {
+  opacity: 0;
+  animation: nameReveal 1s var(--ease-out-expo) forwards;
 }
 
 .hero__greeting  { animation-delay: 0s; }
@@ -211,7 +277,7 @@ a {
   border-top: 1px solid var(--border);
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), border-color 0.3s var(--ease-out);
 }
 
 .role:last-child {
@@ -221,6 +287,10 @@ a {
 .role.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.role:hover {
+  border-top-color: #2a2a2a;
 }
 
 .role__period {
@@ -236,6 +306,11 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.role:hover .role__body {
+  transform: translateX(6px);
 }
 
 .role__title {
@@ -288,6 +363,12 @@ a {
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 4rem;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.6s var(--ease-out-expo);
+}
+
+.section__title.visible {
+  clip-path: inset(0 0 0 0);
 }
 
 .projects__list {
@@ -303,7 +384,7 @@ a {
   border-top: 1px solid var(--border);
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), border-color 0.3s var(--ease-out);
 }
 
 .project:last-child {
@@ -315,12 +396,8 @@ a {
   transform: translateY(0);
 }
 
-.project__number {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  padding-top: 0.15rem;
-  flex-shrink: 0;
-  width: 2rem;
+.project:hover {
+  border-top-color: #2a2a2a;
 }
 
 .project__body {
@@ -328,6 +405,20 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  transform: translateX(0);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.project:hover .project__body {
+  transform: translateX(6px);
+}
+
+.project__number {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding-top: 0.15rem;
+  flex-shrink: 0;
+  width: 2rem;
 }
 
 .project__title {
@@ -368,6 +459,14 @@ a {
 /* ========== Footer ========== */
 .footer {
   padding: 8rem 0 3rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.footer.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .footer__container {
